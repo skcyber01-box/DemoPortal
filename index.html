@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OneSpace Demo Portal</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/portal.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b6e4f'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+</head>
+<body>
+<a class="skip" href="#stage">ข้ามไปที่ Demo</a>
+
+<header class="top">
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <div>
+      <strong>OneSpace</strong>
+      <span>Demo Portal</span>
+    </div>
+  </div>
+  <label class="search">
+    <span class="sr">ค้นหาโครงการ</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+    <input id="q" type="search" placeholder="ค้นหาโครงการ ระบบ หรือหน่วยงาน" autocomplete="off">
+    <kbd>/</kbd>
+  </label>
+  <button class="present-btn" id="presentBtn" type="button" aria-pressed="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg>
+    <span>โหมดนำเสนอ</span>
+  </button>
+</header>
+
+<div class="shell">
+  <nav class="index" id="index" aria-label="รายการโครงการ">
+    <div class="filters" role="group" aria-label="กรองตามสถานะ" id="filters"></div>
+    <div id="list"></div>
+    <p class="count" id="count"></p>
+  </nav>
+
+  <main class="stage" id="stage" tabindex="-1">
+    <!-- เติมด้วย portal.js -->
+  </main>
+</div>
+
+<div class="present-nav" aria-label="ควบคุมการนำเสนอ">
+  <button type="button" id="prevBtn" aria-label="โครงการก่อนหน้า">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>
+  </button>
+  <span id="presentPos"></span>
+  <button type="button" id="nextBtn" aria-label="โครงการถัดไป">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+  </button>
+  <button type="button" id="exitPresent" class="exit">ออกจากโหมดนำเสนอ</button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="projects.js"></script>
+<script src="assets/portal.js"></script>
+</body>
+</html>
