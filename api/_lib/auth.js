@@ -1,4 +1,4 @@
-// Shared auth helpers — used by middleware.js (Edge) and api/auth/* (Node).
+// Shared auth helpers — used by the API functions under api/.
 // Uses only Web standard APIs (Web Crypto, TextEncoder) so it runs in both.
 //
 // No database: the pending PIN and the session are HMAC-signed cookies.
@@ -18,6 +18,11 @@ const dec = new TextDecoder();
 export function env(name, fallback = '') {
   const v = typeof process !== 'undefined' && process.env ? process.env[name] : undefined;
   return v == null || v === '' ? fallback : v;
+}
+
+/** Login is off unless LOGIN_REQUIRED=1 is set in Vercel → Environment Variables. */
+export function loginRequired() {
+  return env('LOGIN_REQUIRED') === '1';
 }
 
 export function sessionDays() {

@@ -6,7 +6,7 @@ import {
 } from '../_lib/auth.js';
 import { sendPin } from '../_lib/mail.js';
 import { hasStore, bump, warnNoStore } from '../_lib/store.js';
-import { accessFor } from '../_lib/access.js';
+import { accessFor, superAdmins } from '../_lib/access.js';
 
 const MAX_SENDS_PER_HOUR = 10;
 
@@ -20,7 +20,10 @@ export async function POST(request) {
     }
     warnNoStore();
     if (!(await accessFor(email))) {
-      console.log(`[auth] denied ${email}`);
+      const admins = superAdmins();
+      console.log(`[auth] denied ${email}` + (admins.length
+        ? ` (SUPER_ADMINS has ${admins.length} address(es))`
+        : ' (SUPER_ADMINS is empty: add it in Vercel → Settings → Environment Variables, then Redeploy)'));
       return json({ error: 'not_allowed', message: 'อีเมลนี้ยังไม่มีสิทธิ์เข้าดู Demo กรุณาติดต่อผู้ดูแลพอร์ทัลเพื่อขอสิทธิ์' }, 403);
     }
 

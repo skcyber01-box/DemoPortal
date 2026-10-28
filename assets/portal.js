@@ -290,9 +290,11 @@
     if (d.error) { showEmpty('โหลดรายการโครงการไม่สำเร็จ', d.message || 'กรุณารีเฟรชหน้านี้อีกครั้ง'); return; }
 
     GROUPS = d.groups || []; PROJECTS = d.projects || [];
-    $('who').textContent = d.email; $('who').title = d.email;
-    $('settingsLink').hidden = !d.superAdmin;
-    $('account').hidden = false;
+    if (d.email) {   // no email when login is switched off
+      $('who').textContent = d.email; $('who').title = d.email;
+      $('settingsLink').hidden = !d.superAdmin;
+      $('account').hidden = false;
+    }
 
     renderFilters();
     if (!PROJECTS.length) {
