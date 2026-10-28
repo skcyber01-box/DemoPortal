@@ -2,8 +2,5 @@
   "name": "onespace-demo-portal",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=20" },
-  "dependencies": {
-    "@vercel/functions": "^3.10.4"
-  }
+  "engines": { "node": ">=20" }
 }

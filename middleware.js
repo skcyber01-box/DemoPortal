@@ -1,6 +1,7 @@
 // Vercel Routing Middleware — every page and file needs a signed-in session,
 // except the login page itself and the login API.
-import { next } from '@vercel/functions';
+// No npm imports here on purpose: middleware runs on Vercel's Edge runtime, which has
+// no Node.js built-ins (fs, os, ...). Everything below uses Web standard APIs only.
 import { sessionFrom } from './api/_lib/auth.js';
 import { isSuperAdmin } from './api/_lib/access.js';
 
@@ -11,7 +12,25 @@ export const config = {
   ]
 };
 
+// Tell Vercel to continue to the requested file (same as `next()` from @vercel/functions)
+function next() {
+  return new Response(null, { headers: { 'x-middleware-next': '1' } });
+}
+
+function failClosed(message) {
+  return new Response(message, { status: 500, headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' } });
+}
+
 export default async function middleware(request) {
+  try {
+    return await gate(request);
+  } catch (err) {
+    console.error('[middleware]', err && (err.stack || err.message));
+    return failClosed('Demo Portal ขัดข้องชั่วคราว กรุณาลองใหม่ (ดูรายละเอียดใน Vercel Logs)');
+  }
+}
+
+async function gate(request) {
   // server-only modules (project list, auth code) are never downloadable
   if (new URL(request.url).pathname.startsWith('/api/_lib/')) {
     return new Response('Not found', { status: 404 });
@@ -21,9 +40,7 @@ export default async function middleware(request) {
     session = await sessionFrom(request);
   } catch (err) {
     // AUTH_SECRET missing or too short: fail closed
-    return new Response('Demo Portal ยังตั้งค่าไม่ครบ (AUTH_SECRET) กรุณาตรวจสอบ Environment Variables ใน Vercel', {
-      status: 500, headers: { 'content-type': 'text/plain; charset=utf-8' }
-    });
+    return failClosed('Demo Portal ยังตั้งค่าไม่ครบ (AUTH_SECRET) กรุณาตรวจสอบ Environment Variables ใน Vercel');
   }
   if (session) {
     // the settings page is for Super Admins only

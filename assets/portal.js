@@ -1,8 +1,9 @@
 (function () {
   'use strict';
 
-  var GROUPS = window.GROUPS || [];
-  var PROJECTS = window.PROJECTS || [];
+  // filled from /api/projects: the server only sends what this viewer may see
+  var GROUPS = [];
+  var PROJECTS = [];
 
   var STATUS = {
     live:  'ใช้งานจริง',
@@ -43,6 +44,9 @@
 
   /* ---------- index ---------- */
   function renderFilters() {
+    // status filters only earn their place once the list is long
+    if (PROJECTS.length < 6) { filtersEl.style.display = 'none'; return; }
+    filtersEl.style.display = '';
     filtersEl.innerHTML = FILTERS.map(function (f) {
       return '<button type="button" data-f="' + f.id + '" aria-pressed="' + (state.filter === f.id) + '">' + f.label + '</button>';
     }).join('');
@@ -66,7 +70,7 @@
           (state.current === p.id ? ' aria-current="true"' : '') + '>' +
           '<span class="dot ' + esc(p.status) + '" title="' + esc(STATUS[p.status] || '') + '"></span>' +
           '<span class="nm">' + esc(p.name) + '</span>' +
-          '<span class="ow">' + esc(p.owner || STATUS[p.status] || '') + '</span>' +
+          '<span class="ow">' + (p.off ? '<em class="offtag">ปิดอยู่</em> ' : '') + esc(p.owner || STATUS[p.status] || '') + '</span>' +
           '</button></li>';
       });
       html += '</ul></section>';
@@ -114,7 +118,8 @@
     stageEl.innerHTML =
       '<button type="button" class="back" data-act="back">' + icon('back') + 'รายการโครงการ</button>' +
       '<div class="stage-head"><div>' +
-        '<div class="status-line"><span class="dot ' + esc(p.status) + '" style="width:10px;height:10px;border-radius:50%;display:inline-block"></span>' + esc(STATUS[p.status] || '') + '</div>' +
+        '<div class="status-line"><span class="dot ' + esc(p.status) + '" style="width:10px;height:10px;border-radius:50%;display:inline-block"></span>' + esc(STATUS[p.status] || '') +
+          (p.off ? '<span class="offnote">ปิดการแสดงผลอยู่ ผู้ชมทั่วไปมองไม่เห็นโครงการนี้</span>' : '') + '</div>' +
         '<h1>' + esc(p.name) + '</h1>' +
         '<p class="summary">' + esc(p.summary) + '</p>' +
         (meta ? '<div class="meta">' + meta + '</div>' : '') +
@@ -256,18 +261,53 @@
     if (id && id !== state.current) select(id, { noHash: true });
   });
 
-  /* ---------- start ---------- */
-  renderFilters();
-  var start = location.hash.slice(1);
-  if (!byId(start)) {
-    var firstEmbed = PROJECTS.filter(function (p) { return p.url && p.embed; })[0];
-    start = (firstEmbed || PROJECTS[0] || {}).id;
+  $('logoutBtn').addEventListener('click', function () {
+    fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
+      .finally(function () { location.replace('/login.html'); });
+  });
+
+  function toLogin(reason) {
+    location.replace('/login.html' + (reason ? '?reason=' + reason : '') + location.hash);
   }
-  if (start) {
+
+  function showEmpty(title, body) {
+    listEl.innerHTML = '';
+    countEl.textContent = '';
+    stageEl.innerHTML = '<div class="placard empty"><h3>' + esc(title) + '</h3><p>' + esc(body) + '</p></div>';
+    document.body.classList.add('viewing');
+  }
+
+  /* ---------- start ---------- */
+  fetch('/api/projects', { credentials: 'same-origin', cache: 'no-store' }).then(function (r) {
+    if (r.status === 401) { toLogin(); return null; }
+    if (r.status === 403) {
+      fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' }).finally(function () { toLogin('revoked'); });
+      return null;
+    }
+    return r.json();
+  }).then(function (d) {
+    if (!d) return;
+    if (d.error) { showEmpty('โหลดรายการโครงการไม่สำเร็จ', d.message || 'กรุณารีเฟรชหน้านี้อีกครั้ง'); return; }
+
+    GROUPS = d.groups || []; PROJECTS = d.projects || [];
+    $('who').textContent = d.email; $('who').title = d.email;
+    $('settingsLink').hidden = !d.superAdmin;
+    $('account').hidden = false;
+
+    renderFilters();
+    if (!PROJECTS.length) {
+      showEmpty('ยังไม่มี Demo ที่คุณเปิดดูได้', 'บัญชีของคุณยังไม่ได้รับสิทธิ์ดูโครงการใด กรุณาติดต่อ OneSpace เพื่อขอสิทธิ์');
+      return;
+    }
+    var start = location.hash.slice(1);
+    if (!byId(start)) {
+      var firstEmbed = PROJECTS.filter(function (p) { return p.url && p.embed && !p.off; })[0];
+      start = (firstEmbed || PROJECTS[0]).id;
+    }
     select(start, { noHash: !location.hash });
     // on phones, open on the list unless a project was linked directly
     if (!location.hash) document.body.classList.remove('viewing');
-  } else {
-    renderList();
-  }
+  }).catch(function () {
+    showEmpty('เชื่อมต่อไม่ได้', 'ตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้านี้อีกครั้ง');
+  });
 })();
