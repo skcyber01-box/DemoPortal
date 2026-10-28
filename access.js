@@ -18,7 +18,11 @@ export const PUBLIC_DOMAINS = ['gmail.com', 'googlemail.com', 'hotmail.com', 'ou
   'yahoo.com', 'icloud.com', 'me.com', 'msn.com', 'proton.me', 'protonmail.com', 'aol.com'];
 
 export function superAdmins() {
-  return env('SUPER_ADMINS').split(/[\s,;]+/).map(normalizeEmail).filter(Boolean);
+  // tolerate values pasted with quotes or brackets, e.g. "a@b.com" or <a@b.com>
+  return env('SUPER_ADMINS')
+    .split(/[\s,;]+/)
+    .map(s => normalizeEmail(s.replace(/^["'<\[]+|["'>\]]+$/g, '')))
+    .filter(Boolean);
 }
 export function isSuperAdmin(email) {
   return !!email && superAdmins().includes(normalizeEmail(email));
