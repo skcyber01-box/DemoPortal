@@ -20,6 +20,11 @@ export function env(name, fallback = '') {
   return v == null || v === '' ? fallback : v;
 }
 
+/** Login is off unless LOGIN_REQUIRED=1 is set in Vercel → Environment Variables. */
+export function loginRequired() {
+  return env('LOGIN_REQUIRED') === '1';
+}
+
 export function sessionDays() {
   const n = parseInt(env('SESSION_DAYS', '7'), 10);
   return Number.isFinite(n) && n > 0 && n <= 90 ? n : 7;
