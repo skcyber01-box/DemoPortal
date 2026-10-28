@@ -32,6 +32,11 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg>
     <span>โหมดนำเสนอ</span>
   </button>
+  <div class="account" id="account" hidden>
+    <a href="/admin.html" id="settingsLink" hidden>ตั้งค่า</a>
+    <span id="who" title=""></span>
+    <button type="button" id="logoutBtn">ออกจากระบบ</button>
+  </div>
 </header>
 
 <div class="shell">
@@ -59,7 +64,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="projects.js"></script>
 <script src="assets/portal.js"></script>
 </body>
 </html>

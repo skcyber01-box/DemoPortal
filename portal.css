@@ -67,6 +67,18 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 }
 .present-btn:hover { background: #1c3d36; }
 
+.account { display: flex; align-items: center; gap: 10px; padding-left: 16px; border-left: 1px solid #2f5850; }
+.account[hidden] { display: none; }
+.account a { color: #5fd3a8; font-size: 14px; font-weight: 600; text-decoration: none; padding: 6px 4px; }
+.account a:hover { text-decoration: underline; }
+.account a[hidden] { display: none; }
+.offtag { font-style: normal; font-size: 12px; font-weight: 600; color: #8a4b0f; background: #fbe7cf; border-radius: 4px; padding: 0 6px; }
+.offnote { margin-left: 10px; font-size: 13px; color: #8a4b0f; background: #fbe7cf; border-radius: 4px; padding: 1px 8px; }
+.placard.empty { margin: auto; max-width: 560px; height: auto; background: transparent; padding: 48px 0; }
+.account span { font-size: 14px; color: #a9c2ba; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account button { height: 34px; padding: 0 12px; border: 0; border-radius: var(--r-s); background: transparent; color: #fff; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.account button:hover { background: #1c3d36; }
+
 /* ---------- shell ---------- */
 .shell {
   display: grid;
@@ -235,6 +247,8 @@ body.present .present-nav {
   .search { order: 3; flex-basis: 100%; max-width: none; }
   .search kbd { display: none; }
   .present-btn { display: none; }
+  .account { margin-left: auto; border-left: 0; padding-left: 0; }
+  .account span { display: none; }
   .shell { display: block; height: auto; }
   .index { border-right: 0; }
   .stage { display: none; padding: 16px; min-height: calc(100dvh - var(--top)); }

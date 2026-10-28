@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>เข้าสู่ระบบ · OneSpace Demo Portal</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/login.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b6e4f'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+</head>
+<body>
+<main class="wrap">
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <div><strong>OneSpace</strong><span>Demo Portal</span></div>
+  </div>
+
+  <!-- step 1: email -->
+  <form class="card" id="emailStep" novalidate>
+    <h1>เข้าสู่ระบบเพื่อดู Demo</h1>
+    <p class="lead">ใส่อีเมลที่ได้รับสิทธิ์ เราจะส่งรหัส 6 หลักไปให้ทางอีเมล</p>
+    <label for="email">อีเมล</label>
+    <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" required>
+    <p class="err" id="emailErr" role="alert"></p>
+    <button class="primary" type="submit" id="sendBtn">ส่งรหัสเข้าสู่ระบบ</button>
+  </form>
+
+  <!-- step 2: PIN -->
+  <form class="card" id="pinStep" hidden novalidate>
+    <h1>ใส่รหัส 6 หลัก</h1>
+    <p class="lead">ส่งรหัสไปที่ <b id="sentTo"></b> แล้ว รหัสใช้ได้ 10 นาที ถ้าไม่เห็นอีเมล ลองดูในโฟลเดอร์ Junk/Spam</p>
+    <label for="pin">รหัสเข้าสู่ระบบ</label>
+    <input id="pin" name="pin" class="pin" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••" pattern="\d{6}" required>
+    <p class="err" id="pinErr" role="alert"></p>
+    <button class="primary" type="submit" id="verifyBtn">เข้าสู่ระบบ</button>
+    <div class="row">
+      <button type="button" class="link" id="resendBtn" disabled>ส่งรหัสอีกครั้ง</button>
+      <button type="button" class="link" id="changeBtn">เปลี่ยนอีเมล</button>
+    </div>
+  </form>
+
+  <p class="foot">สำหรับผู้ที่ได้รับเชิญเท่านั้น หากต้องการสิทธิ์เข้าดู กรุณาติดต่อ OneSpace</p>
+</main>
+<script src="assets/login.js"></script>
+</body>
+</html>

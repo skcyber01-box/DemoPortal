@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ตั้งค่าสิทธิ์ · OneSpace Demo Portal</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/portal.css">
+<link rel="stylesheet" href="assets/admin.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b6e4f'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+</head>
+<body class="admin">
+<header class="top">
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <div><strong>OneSpace</strong><span>ตั้งค่าสิทธิ์</span></div>
+  </div>
+  <a class="back-link" href="/">กลับไปหน้า Demo</a>
+  <div class="account" id="account">
+    <span id="who"></span>
+    <button type="button" id="logoutBtn">ออกจากระบบ</button>
+  </div>
+</header>
+
+<main class="admin-main">
+  <div class="banner" id="banner" hidden></div>
+
+  <section class="panel" aria-labelledby="addTitle">
+    <h2 id="addTitle">เพิ่มผู้ชม</h2>
+    <p class="hint">ใส่อีเมลรายคน หรือ <code>@โดเมน</code> เพื่อเปิดสิทธิ์ให้ทุกคนในโดเมนนั้น เช่น <code>@onespace.co.th</code> ผู้ชมจะเข้าสู่ระบบด้วยรหัส 6 หลักที่ส่งไปทางอีเมล</p>
+    <form id="addForm" class="add" novalidate>
+      <div class="field">
+        <label for="newKey">อีเมล หรือ @โดเมน</label>
+        <input id="newKey" type="text" inputmode="email" autocomplete="off" placeholder="name@hospital.go.th" required>
+      </div>
+      <div class="field">
+        <label for="newName">ชื่อ / หน่วยงาน <span class="opt">(ไม่บังคับ)</span></label>
+        <input id="newName" type="text" maxlength="120" autocomplete="off" placeholder="ผอ.รพ.ตัวอย่าง">
+      </div>
+      <fieldset class="field picks">
+        <legend>ให้ดู Demo</legend>
+        <div id="newProjects" class="chips"></div>
+      </fieldset>
+      <div class="add-actions">
+        <button class="btn primary" type="submit" id="addBtn">เพิ่มผู้ชม</button>
+        <p class="err" id="addErr" role="alert"></p>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel" aria-labelledby="usersTitle">
+    <div class="panel-head">
+      <h2 id="usersTitle">ผู้มีสิทธิ์เข้าดู <span class="num" id="userCount"></span></h2>
+      <label class="mini-search">
+        <span class="sr">ค้นหาผู้ชม</span>
+        <input id="userQ" type="search" placeholder="ค้นหาอีเมลหรือชื่อ" autocomplete="off">
+      </label>
+    </div>
+    <p class="hint">สวิตช์มีผลทันที ปิด <b>ใช้งาน</b> เพื่อระงับการเข้าดูชั่วคราวโดยไม่ลบรายชื่อ เปิด <b>ทุกโครงการ</b> เพื่อให้เห็นทุก Demo รวมถึงที่เพิ่มในอนาคต</p>
+    <div class="table-wrap">
+      <table class="grid" id="grid">
+        <thead id="gridHead"></thead>
+        <tbody id="gridBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="projTitle">
+    <h2 id="projTitle">การแสดงผลโครงการ</h2>
+    <p class="hint">ปิดโครงการเพื่อซ่อนจากผู้ชมทุกคนชั่วคราว เช่น ระหว่างปรับปรุง Demo โดยไม่ต้องแก้สิทธิ์รายคน Super Admin ยังมองเห็นเสมอ</p>
+    <ul class="proj-list" id="projList"></ul>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="assets/admin.js"></script>
+</body>
+</html>

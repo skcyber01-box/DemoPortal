@@ -15,7 +15,7 @@
         },
         {
           "key": "Permissions-Policy",
-          "value": "microphone=(self), camera=(self), fullscreen=(self)"
+          "value": "microphone=*, camera=*, fullscreen=*"
         },
         {
           "key": "X-Content-Type-Options",
