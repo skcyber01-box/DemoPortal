@@ -19,7 +19,8 @@
 
 export const GROUPS = [
   { id: 'hospital', name: 'บริการในโรงพยาบาล' },
-  { id: 'region',   name: 'ติดตามผลงานเขตสุขภาพ' }
+  { id: 'region',   name: 'ติดตามผลงานเขตสุขภาพ' },
+  { id: 'public',   name: 'สาธารณสุขพื้นที่' }
 ];
 
 export const PROJECTS = [
@@ -43,6 +44,17 @@ export const PROJECTS = [
     owner: 'เขตสุขภาพที่ 6',
     tags: ['KPI', 'dashboard', 'ตัวชี้วัด', 'ตรวจราชการ', 'Stroke', 'heatmap', 'เขต 6'],
     url: 'https://mookup-three.vercel.app/',
+    embed: true
+  },
+  {
+    id: 'tak-surveillance',
+    name: 'คอนโซลเฝ้าระวังโรค ศูนย์พักพิงชั่วคราว จ.ตาก',
+    group: 'public',
+    status: 'proto',
+    summary: 'ต้นแบบหน้าจอเฝ้าระวังโรคของ 3 ศูนย์พักพิงชั่วคราว (แม่หละ อุ้มเปี้ยม นุโพ) ติดตามเหตุการณ์ที่ต้องยืนยันภายใน 48 ชั่วโมง อนามัยแม่และเด็ก โรคติดเชื้อทางเดินอาหาร โรคไม่ติดต่อเรื้อรัง และคุณภาพข้อมูล ตามนิยาม WHO EWARN และ UNHCR',
+    owner: 'WHO / JICA, สสจ.ตาก',
+    tags: ['EBS', 'surveillance', 'เฝ้าระวัง', 'Hospital OS', 'UNHCR', 'WHO', 'ตาก', 'แม่หละ', 'อุ้มเปี้ยม', 'นุโพ'],
+    url: 'https://tak-lyart-seven.vercel.app/',
     embed: true
   }
 ];
