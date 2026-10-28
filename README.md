@@ -11,8 +11,6 @@ onespace-demo-portal/
 ├── assets/
 │   ├── portal.css
 │   └── portal.js
-├── demos/                Demo ที่เก็บไว้ใน repo นี้
-│   └── doctor-assist/
 ├── vercel.json           ตั้งค่า Vercel
 └── README.md
 ```
