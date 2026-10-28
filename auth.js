@@ -1,4 +1,4 @@
-// Shared auth helpers — used by middleware.js (Edge) and api/auth/* (Node).
+// Shared auth helpers — used by the API functions under api/.
 // Uses only Web standard APIs (Web Crypto, TextEncoder) so it runs in both.
 //
 // No database: the pending PIN and the session are HMAC-signed cookies.

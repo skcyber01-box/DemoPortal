@@ -1,5 +1,5 @@
 // Request guards for the JSON APIs.
-import { sessionFrom, json } from './auth.js';
+import { sessionFrom, json, loginRequired } from './auth.js';
 import { accessFor, isSuperAdmin } from './access.js';
 
 /** Returns { email, access } or a Response to send back. */
@@ -13,6 +13,9 @@ export async function requireViewer(request) {
 
 /** Super Admin only. Changes must also come from this site (CSRF guard). */
 export async function requireSuperAdmin(request) {
+  if (!loginRequired()) {
+    return json({ error: 'login_off', message: 'หน้าตั้งค่าใช้ได้เมื่อเปิดระบบ Login แล้ว (ตั้ง LOGIN_REQUIRED = 1 ใน Vercel แล้ว Redeploy)' }, 409);
+  }
   if (request.method !== 'GET') {
     const origin = request.headers.get('origin');
     const host = new URL(request.url).host;
