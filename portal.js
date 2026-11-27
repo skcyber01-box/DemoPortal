@@ -104,7 +104,7 @@
     var body;
     if (p.url && p.embed) {
       body = '<div class="loading" id="loading">กำลังเปิด Demo</div>' +
-        '<iframe id="frame" src="' + esc(p.url) + '" title="Demo: ' + esc(p.name) + '" allow="microphone; camera; fullscreen; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+        '<iframe id="frame" src="' + esc(p.url) + '" title="Demo: ' + esc(p.name) + '" allow="microphone; camera; fullscreen; clipboard-write; geolocation; web-share" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
     } else if (p.url) {
       body = '<div class="placard"><h3>ระบบนี้เปิดในแท็บใหม่</h3>' +
         '<p>เว็บไซต์ของระบบนี้ไม่อนุญาตให้แสดงซ้อนในหน้าอื่น กดปุ่มด้านล่างเพื่อเปิดระบบจริงในแท็บใหม่</p>' +

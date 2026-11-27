@@ -56,5 +56,16 @@ export const PROJECTS = [
     tags: ['EBS', 'surveillance', 'เฝ้าระวัง', 'Hospital OS', 'UNHCR', 'WHO', 'ตาก', 'แม่หละ', 'อุ้มเปี้ยม', 'นุโพ'],
     url: 'https://tak-lyart-seven.vercel.app/',
     embed: true
+  },
+  {
+    id: 'moph-cert-map',
+    name: 'แผนที่ใบรับรองแพทย์ MOPH Certificate (Map V.1)',
+    group: 'public',
+    status: 'proto',
+    summary: 'ต้นแบบเว็บแผนที่สถานพยาบาลที่ออกใบรับรองแพทย์ดิจิทัล หมุดแยกตามระดับสถานพยาบาล สถานะ Active/Inactive และเปิด–ปิดตามเวลาทำการ ค้นหาใกล้ฉัน ค้นหาในบริเวณนี้ ค้นหาด้วยวัตถุประสงค์ เช่น “ต่อใบขับขี่” โทร นำทาง แชร์โลเคชัน และเข้าสู่ระบบด้วย Health ID',
+    owner: 'สป. / MOPH Certificate',
+    tags: ['MOPH Certificate', 'ใบรับรองแพทย์', 'แผนที่', 'map', 'Health ID', 'ใบขับขี่', 'หมอพร้อม'],
+    url: '/demos/moph-cert-map',
+    embed: true
   }
 ];
