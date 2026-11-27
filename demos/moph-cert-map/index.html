@@ -6,6 +6,14 @@
 <title>แผนที่ใบรับรองแพทย์ · MOPH Certificate (Demo Map V.1)</title>
 <meta name="description" content="ต้นแบบระบบแผนที่สถานพยาบาลที่ออกใบรับรองแพทย์ดิจิทัล MOPH Certificate">
 <meta name="theme-color" content="#0B6E69">
+<script>/* ให้อยู่ใน scope ของแอป (จำเป็นต่อการติดตั้ง) */if(location.pathname==='/demos/moph-cert-map'||location.pathname==='/demos/moph-cert-map/'){location.replace('/demos/moph-cert-map/index.html'+location.search+location.hash)}</script>
+<link rel="manifest" href="/demos/moph-cert-map/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="/demos/moph-cert-map/favicon-32.png">
+<link rel="apple-touch-icon" href="/demos/moph-cert-map/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="แผนที่ใบรับรอง">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -674,6 +682,9 @@
   // refresh open/closed every minute
   setInterval(() => { if (S.timeMode === 'now') render(); }, 60000);
   window.addEventListener('resize', () => map.invalidateSize());
+  if ('serviceWorker' in navigator && location.pathname.startsWith('/demos/moph-cert-map/')) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/demos/moph-cert-map/sw.js', { scope: '/demos/moph-cert-map/' }).catch(() => {}));
+  }
 })();
 </script>
 </body>

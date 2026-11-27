@@ -65,7 +65,7 @@ export const PROJECTS = [
     summary: 'ต้นแบบเว็บแผนที่สถานพยาบาลที่ออกใบรับรองแพทย์ดิจิทัล หมุดแยกตามระดับสถานพยาบาล สถานะ Active/Inactive และเปิด–ปิดตามเวลาทำการ ค้นหาใกล้ฉัน ค้นหาในบริเวณนี้ ค้นหาด้วยวัตถุประสงค์ เช่น “ต่อใบขับขี่” โทร นำทาง แชร์โลเคชัน และเข้าสู่ระบบด้วย Health ID',
     owner: 'สป. / MOPH Certificate',
     tags: ['MOPH Certificate', 'ใบรับรองแพทย์', 'แผนที่', 'map', 'Health ID', 'ใบขับขี่', 'หมอพร้อม'],
-    url: '/demos/moph-cert-map',
+    url: '/demos/moph-cert-map/index.html',
     embed: true
   }
 ];

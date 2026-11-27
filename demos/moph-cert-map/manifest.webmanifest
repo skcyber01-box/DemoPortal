@@ -1,0 +1,18 @@
+{
+  "id": "/demos/moph-cert-map/",
+  "name": "แผนที่ใบรับรองแพทย์ MOPH Certificate (Demo)",
+  "short_name": "แผนที่ใบรับรอง",
+  "description": "ต้นแบบแผนที่สถานพยาบาลที่ออกใบรับรองแพทย์ดิจิทัล MOPH Certificate · Map V.1",
+  "lang": "th",
+  "start_url": "/demos/moph-cert-map/index.html",
+  "scope": "/demos/moph-cert-map/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F7F6",
+  "theme_color": "#0B6E69",
+  "icons": [
+    { "src": "/demos/moph-cert-map/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/demos/moph-cert-map/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/demos/moph-cert-map/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
