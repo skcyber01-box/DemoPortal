@@ -69,8 +69,10 @@
   .handle span{width:40px;height:4px;border-radius:2px;background:#CBD5D2}
   .pbody{flex:1;min-height:0;overflow-y:auto;padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
   .float{position:absolute;z-index:800}
-  .here{left:50%;transform:translateX(-50%);top:12px;display:none;height:42px;padding:0 16px;border-radius:21px;border:none;background:var(--ink);color:#fff;font-weight:600;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.25);align-items:center;gap:6px;white-space:nowrap}
+  .here{left:50%;transform:translateX(-50%);top:60px;display:none;height:42px;padding:0 16px;border-radius:21px;border:none;background:var(--ink);color:#fff;font-weight:600;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.25);align-items:center;gap:6px;white-space:nowrap}
   .here.show{display:flex}
+  .areas{left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 70px)}
+  .areas button{height:36px;padding:0 12px;border-radius:18px;border:none;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:13px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
   .ctrls{right:12px;bottom:calc(var(--sheet) + 12px);display:flex;gap:8px;transition:bottom .25s ease}
   .fab{height:44px;min-width:44px;padding:0 14px;border-radius:22px;border:none;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:14px;color:var(--brand)}
   .fab.sq{padding:0;color:var(--ink)}
@@ -93,6 +95,7 @@
   .itxt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
   .itxt b{font-size:14px;font-weight:600}
   .itxt span{font-size:12px;color:var(--muted)}
+  .itxt .hrs{display:flex;align-items:center;gap:4px;color:#3E5254}
   .iside{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
   .iside b{font-size:13px}
   .tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:9px;white-space:nowrap}
@@ -183,6 +186,7 @@
     .pbody{padding:16px}
     #map{left:400px}
     .here{left:calc(50% + 200px)}
+    .areas{left:412px}
     .ctrls{bottom:24px;right:16px}
     .legend{bottom:78px;right:16px}
     .dlg{left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);width:560px;border-radius:20px}
@@ -234,6 +238,7 @@
 <main id="main">
   <div id="map" aria-label="แผนที่สถานพยาบาล"></div>
 
+  <div class="float areas" id="areas" role="group" aria-label="ไปยังพื้นที่ตัวอย่าง"></div>
   <button id="hereBtn" class="float here" type="button">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg>
     ค้นหาในบริเวณนี้
@@ -303,18 +308,24 @@
     H: { name: 'โรงพยาบาลเอกชน', l: 'อ', c: '#C2410C' },
     C: { name: 'คลินิกเอกชน', l: 'ค', c: '#AD1457' }
   };
-  const CERT = { drive: 'ใบอนุญาตขับรถ', job: 'สมัครงาน', general: 'ทั่วไป (5 โรค)', sick: 'ลาป่วย', foreign: 'แรงงานต่างด้าว', study: 'ศึกษาต่อ' };
+  const CERT = { drive: 'ใบอนุญาตขับรถ', job: 'สมัครงาน', general: 'ทั่วไป (5 โรค)', sick: 'ลาป่วย', foreign: 'แรงงานต่างด้าว', study: 'ศึกษาต่อ', sso: 'ประกันสังคม' };
   const INTENTS = [
     { cert: 'drive', words: ['ต่อใบขับขี่', 'ใบขับขี่', 'ทำใบขับขี่', 'ขับรถ', 'ขับขี่', 'กรมขนส่ง', 'ใบอนุญาตขับรถ'] },
     { cert: 'job', words: ['สมัครงาน', 'ทำงาน', 'เข้างาน'] },
     { cert: 'sick', words: ['ลาป่วย', 'ป่วย', 'ลางาน'] },
     { cert: 'foreign', words: ['ต่างด้าว', 'แรงงาน', 'ใบอนุญาตทำงาน', 'work permit'] },
     { cert: 'study', words: ['เรียนต่อ', 'สมัครเรียน', 'ศึกษาต่อ', 'สอบเข้า'] },
+    { cert: 'sso', words: ['ประกันสังคม', 'สปส', 'ประกันตน', 'เบิกประกันสังคม', 'กองทุนทดแทน', 'เงินทดแทน'] },
     { cert: 'general', words: ['5 โรค', 'ห้าโรค', 'ทั่วไป', 'ตรวจสุขภาพ'] }
   ];
-  const SUGGEST = ['ต่อใบขับขี่', 'สมัครงาน', 'ลาป่วย', 'แรงงานต่างด้าว', 'เรียนต่อ'];
+  const SUGGEST = ['ต่อใบขับขี่', 'สมัครงาน', 'ลาป่วย', 'ประกันสังคม', 'แรงงานต่างด้าว', 'เรียนต่อ'];
   const ALL = Object.keys(CERT);
-  const BASE = { lat: 13.8518, lng: 100.5266 }; // จุดเริ่มต้นจำลอง (ใช้เมื่อไม่อนุญาตตำแหน่ง)
+  const BASE = { lat: 13.8518, lng: 100.5266 }; // กระทรวงสาธารณสุข นนทบุรี (จุดเริ่มต้น)
+  const ASOKE = { lat: 13.7480, lng: 100.5637 }; // แยกเพชรบุรี–อโศก
+  const AREAS = [
+    { id: 'moph', name: 'กระทรวงสาธารณสุข', pos: BASE },
+    { id: 'asoke', name: 'เพชรบุรี–อโศก', pos: ASOKE }
+  ];
 
   // [id, name, level, dxKm(E), dyKm(N), certs, weekday hours, weekend hours, active]
   const RAW = [
@@ -337,15 +348,31 @@
     ['f17', 'โรงพยาบาลเอกชนสาม', 'H', -1.8, 4.8, ['drive', 'job', 'general', 'sick', 'foreign', 'study'], [6, 22], [6, 22], true],
     ['f18', 'คลินิกเวชกรรมห้า', 'C', 2.2, -3.8, ['drive', 'general'], [16, 20], [9, 15], true]
   ];
+  // บริเวณเพชรบุรี–อโศก (ตำแหน่งคงที่)
+  const RAW_ASOKE = [
+    ['a1', 'โรงพยาบาลเอกชนเพชรบุรี', 'H', 0.5, 0.3, ALL, [0, 24], [0, 24], true],
+    ['a2', 'โรงพยาบาลเอกชนอโศก', 'H', -0.6, -0.9, ['drive', 'job', 'general', 'sick', 'sso', 'foreign'], [7, 21], [7, 21], true],
+    ['a3', 'คลินิกเวชกรรมอโศก', 'C', 0.2, -0.4, ['drive', 'job', 'general', 'sick'], [9, 20], [9, 17], true],
+    ['a4', 'คลินิกเวชกรรมเพชรบุรี 47', 'C', 1.1, 0.1, ['drive', 'job', 'general', 'foreign'], [8, 20], [8, 20], true],
+    ['a5', 'คลินิกตรวจสุขภาพนานา', 'C', -1.3, -1.6, ['drive', 'job', 'general', 'study'], [10, 19], [10, 16], true],
+    ['a6', 'คลินิกเวชกรรมมักกะสัน', 'C', -0.3, 1.0, ['drive', 'general', 'sick'], [17, 21], [9, 13], true],
+    ['a7', 'คลินิกตรวจสุขภาพรัชดา', 'C', 0.4, 2.0, ['drive', 'job', 'general', 'study', 'sso'], [8, 17], null, true],
+    ['a8', 'โรงพยาบาลทั่วไปตัวอย่าง กทม.', 'S', -1.8, 0.8, ALL, [8, 16], [8, 12], true],
+    ['a9', 'คลินิกเวชกรรมทองหล่อ', 'C', 2.1, -1.2, ['drive', 'job', 'general'], [10, 20], [10, 18], false],
+    ['a10', 'คลินิกเวชกรรมสุขุมวิท 21', 'C', 0.0, -1.2, ['drive', 'general', 'sick', 'sso'], [8, 18], [9, 15], true]
+  ];
   let F = [];
-  function buildFacilities(origin) {
-    F = RAW.map((r, i) => ({
+  const mk = (origin, off) => (r, i) => ({
       id: r[0], name: r[1] + ' (ตัวอย่าง)', lv: r[2],
       lat: origin.lat + r[4] / 110.6, lng: origin.lng + r[3] / (111.3 * Math.cos(origin.lat * Math.PI / 180)),
       certs: r[5], wk: r[6], we: r[7], active: r[8],
       addr: '[เลขที่] ถนน[ชื่อถนน] ตำบล[ตำบล] อำเภอ[อำเภอ] จังหวัด[จังหวัด] [รหัสไปรษณีย์]',
-      phone: '0' + (2 + (i % 7)) + '-000-' + String(1000 + i * 37).slice(0, 4)
-    }));
+      phone: '0' + (2 + ((i + off) % 7)) + '-000-' + String(1000 + (i + off) * 37).slice(0, 4)
+    });
+  function buildFacilities(origin) {
+    F = RAW.map(mk(origin, 0)).concat(RAW_ASOKE.map(mk(ASOKE, 40)));
+    // โรงพยาบาลทุกระดับออกใบรับรองประกันสังคมได้ (ข้อมูลสาธิต)
+    F.forEach((f) => { if ('ASMH'.includes(f.lv) && !f.certs.includes('sso')) f.certs = f.certs.concat('sso'); });
   }
   buildFacilities(BASE);
 
@@ -368,11 +395,28 @@
   }
   const hoursFor = (f, t) => (t.day === 0 || t.day === 6) ? f.we : f.wk;
   const isOpen = (f) => { const t = now(), r = hoursFor(f, t); return !!r && t.hour >= r[0] && t.hour < r[1]; };
+  const DAYFULL = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+  function nextOpen(f) {
+    const t = now();
+    for (let k = 1; k <= 7; k++) {
+      const day = (t.day + k) % 7, r = (day === 0 || day === 6) ? f.we : f.wk;
+      if (r) return (k === 1 ? 'พรุ่งนี้ ' : 'วัน' + DAYFULL[day] + ' ') + hhmm(r[0]) + ' น.';
+    }
+    return '';
+  }
+  function todayHours(f) { const r = hoursFor(f, now()); return 'วันนี้ ' + (r ? range(r) : 'ปิดทำการ'); }
+  function openShort(f) {
+    const t = now(), r = hoursFor(f, t);
+    if (isOpen(f)) return r[0] === 0 && r[1] === 24 ? 'เปิด 24 ชม.' : 'เปิดอยู่ · ปิด ' + hhmm(r[1]);
+    if (r && t.hour < r[0]) return 'ปิด · เปิด ' + hhmm(r[0]);
+    return 'ปิดแล้ว';
+  }
   function openText(f) {
     const t = now(), r = hoursFor(f, t);
     if (isOpen(f)) return r[0] === 0 && r[1] === 24 ? 'เปิดอยู่ · 24 ชั่วโมง' : 'เปิดอยู่ · ปิด ' + hhmm(r[1]) + ' น.';
     if (r && t.hour < r[0]) return 'ปิดอยู่ · เปิด ' + hhmm(r[0]) + ' น.';
-    return 'ปิดแล้ววันนี้';
+    const n = nextOpen(f);
+    return 'ปิดแล้ว' + (n ? ' · เปิด' + n : '');
   }
   function distKm(a, b) {
     const R = 6371, dLat = (b.lat - a.lat) * Math.PI / 180, dLng = (b.lng - a.lng) * Math.PI / 180;
@@ -480,8 +524,9 @@
       const open = isOpen(f);
       return `<button class="item" type="button" data-sel="${f.id}">
         ${lvChip(f.lv, '', !f.active)}
-        <span class="itxt"><b>${esc(f.name)}</b><span>${LV[f.lv].name}${f.active ? '' : ' · Inactive'}</span></span>
-        <span class="iside"><b>${fmtDist(f.km)}</b><span class="tag ${open ? 't-open' : 't-closed'}">${open ? 'เปิดอยู่' : 'ปิด'}</span></span>
+        <span class="itxt"><b>${esc(f.name)}</b><span>${LV[f.lv].name}${f.active ? '' : ' · Inactive'}</span>
+          <span class="hrs"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${todayHours(f)}</span></span>
+        <span class="iside"><b>${fmtDist(f.km)}</b><span class="tag ${open ? 't-open' : 't-closed'}">${openShort(f)}</span></span>
       </button>`;
     }).join('');
     return h;
@@ -506,7 +551,7 @@
       </div>
       <div class="obox" style="${open ? 'background:var(--ok-bg);color:var(--ok)' : 'background:#F0F3F2;color:var(--off)'}">
         <b>${openText(f)}</b>
-        <span>จันทร์–ศุกร์ ${range(f.wk)}<br>เสาร์–อาทิตย์ ${range(f.we)}</span>
+        <span>จันทร์–ศุกร์ ${range(f.wk)}<br>เสาร์–อาทิตย์ ${range(f.we)}<br>วันหยุดนักขัตฤกษ์ [ตามประกาศของหน่วยบริการ]</span>
       </div>
       <div class="sec"><b>ใบรับรองแพทย์ที่ออกได้</b>
         <div class="cwrap">${f.certs.map((c) => `<span class="cert ${c === C.cert ? 'hit' : ''}">${CERT[c]}</span>`).join('')}</div>
@@ -572,7 +617,7 @@
   $('nearBtn').addEventListener('click', () => {
     const go = (pos, real) => {
       S.user = pos; meMarker.setLatLng([pos.lat, pos.lng]);
-      if (real && distKm(pos, F[0]) > 30) { buildFacilities(pos); toast('ข้อมูลสาธิตถูกจัดวางรอบตำแหน่งของคุณ'); }
+      if (real && AREAS.every((a) => distKm(pos, a.pos) > 30)) { buildFacilities(pos); toast('ไม่มีข้อมูลตัวอย่างใกล้คุณ จึงจัดวางหน่วยบริการตัวอย่างรอบตำแหน่งของคุณ'); }
       S.sel = null;
       if (S.q && !intentOf(S.q.trim())) { S.q = ''; $('q').value = ''; }
       progMove(() => map.setView([pos.lat, pos.lng], 14));
@@ -585,6 +630,18 @@
       () => { go({ ...BASE }, false); toast('ไม่ได้รับอนุญาตตำแหน่ง ใช้ตำแหน่งจำลองแทน'); },
       { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
     );
+  });
+
+  const pinSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0B6E69" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/></svg>';
+  $('areas').innerHTML = AREAS.map((a) => `<button type="button" data-area="${a.id}">${pinSvg}${a.name}</button>`).join('');
+  $('areas').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-area]'); if (!b) return;
+    const a = AREAS.find((x) => x.id === b.dataset.area);
+    S.sel = null;
+    if (S.q && !intentOf(S.q.trim())) { S.q = ''; $('q').value = ''; }
+    progMove(() => map.setView([a.pos.lat, a.pos.lng], 14));
+    setTimeout(() => { S.area = map.getBounds(); $('hereBtn').classList.remove('show'); render(); }, 350);
+    toast('แสดงหน่วยบริการบริเวณ' + a.name);
   });
 
   $('legend').innerHTML = `<b>ระดับสถานพยาบาล</b>` +

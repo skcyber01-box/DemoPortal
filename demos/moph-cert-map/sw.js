@@ -3,7 +3,7 @@
  * - Leaflet / ฟอนต์: cache-first
  * - ไทล์แผนที่: ไม่แคช (ต้องออนไลน์)
  */
-const CACHE = 'moph-cert-map-v1';
+const CACHE = 'moph-cert-map-v2';
 const BASE = '/demos/moph-cert-map/';
 const SHELL = [
   BASE + 'index.html',
